@@ -1,8 +1,11 @@
 package kpo.homework.two.utils;
 
 import kpo.homework.two.model.Food;
+import kpo.homework.two.model.Order;
+import kpo.homework.two.model.OrderHandler;
 
 import java.io.IOException;
+import java.util.List;
 
 // Класс AdminConsole для работы администратора.
 public class AdminConsole {
@@ -17,6 +20,7 @@ public class AdminConsole {
                 System.out.println("2 - Add dish");
                 System.out.println("3 - Remove dish");
                 System.out.println("4 - Edit dish");
+                System.out.println("5 - Show feedback to orders");
                 System.out.println("q - Exit");
                 System.out.println();
                 System.out.print("Your input> ");
@@ -36,6 +40,9 @@ public class AdminConsole {
                         break;
                     case "4":
                         EditDish();
+                        break;
+                    case "5":
+                        ShowFeedback();
                         break;
                     case "q":
                         return;
@@ -180,5 +187,19 @@ public class AdminConsole {
             }
         }
         return cookTime;
+    }
+
+    // Метод для отображения всех заказов с отзывами.
+    private static void ShowFeedback() {
+        List<Order> orders = OrderHandler.INSTANCE.getAll();
+        System.out.println("Orders with feedback:");
+        for (int i = 0; i < orders.size(); ++i) {
+            synchronized (orders.get(i)) {
+                if (orders.get(i).getMark() != -1) {
+                    System.out.println(orders.get(i) + "Mark='" + orders.get(i).getMark() + "'; Comment='" + orders.get(i).getComment() + "'");
+                }
+            }
+        }
+        System.out.println();
     }
 }

@@ -75,12 +75,10 @@ public class Order {
         this.status = OrderStatus.Accepted;
     }
 
-    // Добавление отзыва к заказу
+    // Добавление отзыва к заказу.
     public void AddComment(int mark, String comment) {
-        if (this.status == OrderStatus.Paid) {
-            this.mark = mark;
-            this.comment = comment;
-        }
+        this.mark = mark;
+        this.comment = comment;
     }
 
     // Добавление блюда в заказ.

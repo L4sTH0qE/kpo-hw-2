@@ -20,6 +20,7 @@ public class CustomerConsole {
                 System.out.println("3 - Cancel order");
                 System.out.println("4 - Pay for the order");
                 System.out.println("5 - Add dish to the order");
+                System.out.println("6 - Give feedback to the order");
                 System.out.println("q - Exit");
                 System.out.println();
                 System.out.print("Your input> ");
@@ -42,6 +43,9 @@ public class CustomerConsole {
                         break;
                     case "5":
                         AddDishToOrder();
+                        break;
+                    case "6":
+                        GiveFeedback();
                         break;
                     case "q":
                         return;
@@ -200,5 +204,60 @@ public class CustomerConsole {
             }
         }
         System.out.println();
+    }
+
+    // Метод для добавления отзыва к оплаченным заказам.
+    private static void GiveFeedback() throws IOException {
+        int orderId = getOrderId();
+        if (orderId == -1) {
+            return;
+        }
+        synchronized (OrderHandler.INSTANCE.read(orderId)) {
+            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.Paid)) {
+                System.out.println("This order is not paid. Returning to main menu...");
+                return;
+            } else if (OrderHandler.INSTANCE.read(orderId).getMark() != -1) {
+                System.out.println("This order already has feedback. Returning to main menu...");
+                return;
+            }
+            int mark = getMark();
+            String comment = getComment();
+            OrderHandler.INSTANCE.read(orderId).AddComment(mark, comment);
+            System.out.println("Order is provided with feedback. Thank you!");
+        }
+    }
+
+    // Метод для получения комментария о заказе.
+    private static String getComment() throws IOException {
+        System.out.println();
+        System.out.println("Enter comment:");
+        System.out.print("Your input> ");
+        return Console.scanner.nextLine();
+    }
+
+    // Метод для получения оценки заказа.
+    private static int getMark() throws IOException {
+        int mark= -1;
+        System.out.println();
+        System.out.println("Enter mark for order (1 to 5):");
+        boolean flag = true;
+        while (flag) {
+            try {
+                System.out.print("Your input> ");
+                String choice = Console.scanner.nextLine();
+                mark = Integer.parseInt(choice);
+                System.out.println();
+                if (mark < 1 || mark > 5) {
+                    System.out.println("Error: Mark must be integer value between 1 and 5!");
+                } else {
+                    flag = false;
+                }
+            } catch (NumberFormatException ex1) {
+                System.out.println("Error: Mark must be integer value between 1 and 5!");
+            } catch (Exception ex2) {
+                System.out.println("Error: Unexpected error!");
+            }
+        }
+        return mark;
     }
 }
