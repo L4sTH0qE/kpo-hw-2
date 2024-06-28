@@ -34,7 +34,7 @@ public class Console {
 
 
     // Метод для отображения меню.
-    public static void ShowMenu() {
+    public static void showMenu() {
         List<Food> menu = foodDao.getAll();
         System.out.println("Menu:");
         for (Food food : menu) {
@@ -68,12 +68,12 @@ public class Console {
 
 
     // Метод для записи общего дохода в файл.
-    public static void CountProfit() {
+    public static void countProfit() {
         int profit = 0;
         List<Order> orders = OrderHandler.INSTANCE.getAll();
         for (Order order : orders) {
-            if (order.getStatus() == OrderStatus.Paid) {
-                profit += order.CountProfit();
+            if (order.getStatus() == OrderStatus.PAID) {
+                profit += order.countProfit();
             }
         }
         try {

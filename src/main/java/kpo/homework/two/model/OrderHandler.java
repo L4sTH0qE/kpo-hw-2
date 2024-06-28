@@ -36,12 +36,12 @@ public enum OrderHandler {
     // Метод для добавления блюда в заказ из коллекции.
     public void edit(int id, Dish dish) {
         Order order = read(id);
-        order.AddDish(dish);
+        order.addDish(dish);
         orders.replace(id, order);
     }
 
     // Метод для изменения статуса заказа из коллекции.
-    public void ChangeStatus(int id, OrderStatus status) {
+    public void changeStatus(int id, OrderStatus status) {
         Order order = read(id);
         order.setStatus(status);
         orders.replace(id, order);

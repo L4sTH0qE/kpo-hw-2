@@ -10,7 +10,7 @@ import java.util.List;
 // Класс AdminConsole для работы администратора.
 public class AdminConsole {
     // Метод для отображения главного меню администратора.
-    public static void StartAdminLoop() throws Exception {
+    public static void startAdminLoop() throws Exception {
         try {
             Console.clear();
             // Выводим меню и ждем выбора пользователя, пока не будет выбрана опция "q" (завершение работы)
@@ -33,16 +33,16 @@ public class AdminConsole {
                         Console.ShowMenu();
                         break;
                     case "2":
-                        AddDish();
+                        addDish();
                         break;
                     case "3":
-                        RemoveDish();
+                        removeDish();
                         break;
                     case "4":
-                        EditDish();
+                        editDish();
                         break;
                     case "5":
-                        ShowFeedback();
+                        showFeedback();
                         break;
                     case "q":
                         return;
@@ -58,7 +58,7 @@ public class AdminConsole {
     }
 
     // Метод для изменения блюда из меню.
-    private static void EditDish() throws IOException {
+    private static void editDish() throws IOException {
         if (Console.foodDao.getAll().isEmpty()) {
             System.out.println("No dishes to edit in Menu. Returning to main menu...");
         } else {
@@ -75,7 +75,7 @@ public class AdminConsole {
     }
 
     // Метод для удаления блюда из меню.
-    private static void RemoveDish() throws IOException {
+    private static void removeDish() throws IOException {
         if (Console.foodDao.getAll().isEmpty()) {
             System.out.println("No dishes to remove in Menu. Returning to main menu...");
         } else {
@@ -88,7 +88,7 @@ public class AdminConsole {
     }
 
     // Метод для добавления блюда в меню.
-    private static void AddDish() throws IOException {
+    private static void addDish() throws IOException {
         Console.ShowMenu();
 
         String name = getFoodName(); // Название блюда.
@@ -190,7 +190,7 @@ public class AdminConsole {
     }
 
     // Метод для отображения всех заказов с отзывами.
-    private static void ShowFeedback() {
+    private static void showFeedback() {
         List<Order> orders = OrderHandler.INSTANCE.getAll();
         System.out.println("Orders with feedback:");
         for (int i = 0; i < orders.size(); ++i) {

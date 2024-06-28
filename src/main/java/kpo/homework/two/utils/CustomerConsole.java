@@ -9,7 +9,7 @@ import java.util.*;
 // Класс CustomerConsole для работы посетителя.
 public class CustomerConsole {
     // Метод для отображения главного меню посетителя.
-    public static void StartCustomerLoop() throws Exception {
+    public static void startCustomerLoop() throws Exception {
         try {
             Console.clear();
             // Выводим меню и ждем выбора пользователя, пока не будет выбрана опция "q" (завершение работы)
@@ -30,22 +30,22 @@ public class CustomerConsole {
 
                 switch (choice) {
                     case "1":
-                        ShowOrders();
+                        showOrders();
                         break;
                     case "2":
-                        AddOrder();
+                        addOrder();
                         break;
                     case "3":
-                        RemoveOrder();
+                        removeOrder();
                         break;
                     case "4":
-                        PayOrder();
+                        payOrder();
                         break;
                     case "5":
-                        AddDishToOrder();
+                        addDishToOrder();
                         break;
                     case "6":
-                        GiveFeedback();
+                        giveFeedback();
                         break;
                     case "q":
                         return;
@@ -66,7 +66,7 @@ public class CustomerConsole {
             System.out.println("No orders! Return to main menu...");
             return -1;
         }
-        ShowOrders();
+        showOrders();
         System.out.println();
         System.out.println("Enter available order id:");
         while (true) {
@@ -89,8 +89,8 @@ public class CustomerConsole {
     }
 
     // Метод для выбора блюда.
-    private static Dish ChooseDish() throws IOException {
-        Console.ShowMenu();
+    private static Dish chooseDish() throws IOException {
+        Console.showMenu();
         if (Console.foodDao.getAll().isEmpty()) {
             System.out.println("No dishes available.");
             return null;
@@ -109,24 +109,24 @@ public class CustomerConsole {
     }
 
     // Метод для добавления блюда в активный заказ.
-    private static void AddDishToOrder() throws IOException {
+    private static void addDishToOrder() throws IOException {
         int orderId = getOrderId();
         if (orderId == -1) {
             return;
         }
         synchronized (OrderHandler.INSTANCE.read(orderId)) {
-            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.Accepted || OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.Preparing)) {
+            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.ACCEPTED || OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.PREPARING)) {
                 System.out.println("This order is not active. Returning to main menu...");
                 return;
             }
-            Dish dish = ChooseDish();
+            Dish dish = chooseDish();
             if (dish == null) {
                 System.out.println("Dish is not added to order. Returning to main menu...");
             } else {
                 Order order = OrderHandler.INSTANCE.read(orderId);
                 DishThread dishThread = new DishThread(dish.getCookTimeMS());
                 dishThread.start();
-                order.getThread().GetThreadList().add(dishThread);
+                order.getThread().getThreadList().add(dishThread);
                 OrderHandler.INSTANCE.edit(orderId, dish);
                 System.out.println("Dish is successfully added to order. Returning to main menu...");
             }
@@ -134,30 +134,30 @@ public class CustomerConsole {
     }
 
     // Метод для оплаты готовых заказов.
-    private static void PayOrder() throws IOException {
+    private static void payOrder() throws IOException {
         int orderId = getOrderId();
         if (orderId == -1) {
             return;
         }
         synchronized (OrderHandler.INSTANCE.read(orderId)) {
-            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.Ready)) {
+            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.READY)) {
                 System.out.println("This order is not ready. Returning to main menu...");
                 return;
             }
-            OrderHandler.INSTANCE.ChangeStatus(orderId, OrderStatus.Paid);
+            OrderHandler.INSTANCE.changeStatus(orderId, OrderStatus.PAID);
             System.out.println("Order is successfully paid.");
-            Console.CountProfit();
+            Console.countProfit();
         }
     }
 
     // Метод для отмены активных заказов.
-    private static void RemoveOrder() {
+    private static void removeOrder() {
         int orderId = getOrderId();
         if (orderId == -1) {
             return;
         }
         synchronized (OrderHandler.INSTANCE.read(orderId)) {
-            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.Accepted || OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.Preparing)) {
+            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.ACCEPTED || OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.PREPARING)) {
                 System.out.println("This order is not active. Returning to main menu...");
                 return;
             }
@@ -167,7 +167,7 @@ public class CustomerConsole {
     }
 
     // Метод для создания новых заказов.
-    private static void AddOrder() throws IOException {
+    private static void addOrder() throws IOException {
         Order order = new Order(Console.currentUser.getId(), new ArrayList<Dish>());
         // Добавление блюд в заказ.
         while (true) {
@@ -177,9 +177,9 @@ public class CustomerConsole {
             System.out.println();
 
             if (Objects.equals(choice, "y")) {
-                Dish dish = ChooseDish();
+                Dish dish = chooseDish();
                 if (dish != null) {
-                    order.AddDish(dish);
+                    order.addDish(dish);
                 }
             } else if (Objects.equals(choice, "n")) {
                 break;
@@ -195,7 +195,7 @@ public class CustomerConsole {
     }
 
     // Метод для отображения всех заказов данного посетителя.
-    private static void ShowOrders() {
+    private static void showOrders() {
         List<Order> orders = OrderHandler.INSTANCE.getOrders(Console.currentUser.getId());
         System.out.println("Your orders:");
         for (int i = 0; i < orders.size(); ++i) {
@@ -207,13 +207,13 @@ public class CustomerConsole {
     }
 
     // Метод для добавления отзыва к оплаченным заказам.
-    private static void GiveFeedback() throws IOException {
+    private static void giveFeedback() throws IOException {
         int orderId = getOrderId();
         if (orderId == -1) {
             return;
         }
         synchronized (OrderHandler.INSTANCE.read(orderId)) {
-            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.Paid)) {
+            if (!(OrderHandler.INSTANCE.read(orderId).getStatus() == OrderStatus.PAID)) {
                 System.out.println("This order is not paid. Returning to main menu...");
                 return;
             } else if (OrderHandler.INSTANCE.read(orderId).getMark() != -1) {
@@ -222,7 +222,7 @@ public class CustomerConsole {
             }
             int mark = getMark();
             String comment = getComment();
-            OrderHandler.INSTANCE.read(orderId).AddComment(mark, comment);
+            OrderHandler.INSTANCE.read(orderId).addComment(mark, comment);
             System.out.println("Order is provided with feedback. Thank you!");
         }
     }

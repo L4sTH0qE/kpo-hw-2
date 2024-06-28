@@ -72,17 +72,17 @@ public class Order {
         this.userId = userId;
         this.order = order;
         this.id = ++GLOBAL_ID;
-        this.status = OrderStatus.Accepted;
+        this.status = OrderStatus.ACCEPTED;
     }
 
     // Добавление отзыва к заказу.
-    public void AddComment(int mark, String comment) {
+    public void addComment(int mark, String comment) {
         this.mark = mark;
         this.comment = comment;
     }
 
     // Добавление блюда в заказ.
-    public void AddDish(Dish dish) {
+    public void addDish(Dish dish) {
         order.add(dish);
     }
 
@@ -98,7 +98,7 @@ public class Order {
     }
 
     // Метод для подсчета общей стоимости заказа.
-    public int CountProfit() {
+    public int countProfit() {
         int amount = 0;
         for (Dish dish : order) {
             amount += dish.getPrice();

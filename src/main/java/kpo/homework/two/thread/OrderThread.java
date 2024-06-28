@@ -14,11 +14,11 @@ public class OrderThread extends Thread {
         this.order = order;
     }
 
-    public List<DishThread> GetThreadList() { return threadList; }
+    public List<DishThread> getThreadList() { return threadList; }
 
     // Запуск потока на обработку заказа.
     public void run() {
-        order.setStatus(OrderStatus.Preparing);
+        order.setStatus(OrderStatus.PREPARING);
         // Все блюда из заказа готовятся в отдельных потоках.
         for (Dish dish : order.order) {
             DishThread dishThread = new DishThread(dish.getCookTimeMS());
@@ -34,7 +34,7 @@ public class OrderThread extends Thread {
                 } catch (InterruptedException ex) {
                     // Поток прерван до завершения приготовления всех блюд.
                     synchronized (order) {
-                        order.setStatus(OrderStatus.Rejected);
+                        order.setStatus(OrderStatus.REJECTED);
                     }
                     return;
                 }
@@ -46,7 +46,7 @@ public class OrderThread extends Thread {
                         continue;
                     }
                 }
-                order.setStatus(OrderStatus.Ready);
+                order.setStatus(OrderStatus.READY);
                 break;
             }
         }

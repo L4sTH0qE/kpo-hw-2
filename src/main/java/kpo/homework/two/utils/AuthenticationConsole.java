@@ -26,10 +26,10 @@ public class AuthenticationConsole {
 
                 switch (choice) {
                     case "1":
-                        EnterUser(false);
+                        enterUser(false);
                         break;
                     case "2":
-                        EnterUser(true);
+                        enterUser(true);
                         break;
                     case "q":
                         Console.exit();
@@ -46,7 +46,7 @@ public class AuthenticationConsole {
     }
 
     // Метод для авторизации пользователя.
-    private static void EnterUser(boolean isAdmin) throws Exception {
+    private static void enterUser(boolean isAdmin) throws Exception {
         Console.clear();
         if (isAdmin) {
             boolean flag = true;
@@ -85,9 +85,9 @@ public class AuthenticationConsole {
         }
 
         if (isAdmin) {
-            AdminConsole.StartAdminLoop();
+            AdminConsole.startAdminLoop();
         } else {
-            CustomerConsole.StartCustomerLoop();
+            CustomerConsole.startCustomerLoop();
         }
     }
 
