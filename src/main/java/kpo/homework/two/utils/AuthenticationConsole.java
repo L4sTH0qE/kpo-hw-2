@@ -9,7 +9,7 @@ import java.util.Objects;
 public class AuthenticationConsole {
 
     // Метод для отображения окна входа в программу.
-    public static void StartAuthenticationLoop() throws Exception {
+    public static void startAuthenticationLoop() throws Exception {
         try {
             Console.clear();
             // Выводим меню и ждем выбора пользователя, пока не будет выбрана опция "q" (завершение работы)

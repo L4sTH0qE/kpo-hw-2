@@ -30,7 +30,7 @@ public class AdminConsole {
 
                 switch (choice) {
                     case "1":
-                        Console.ShowMenu();
+                        Console.showMenu();
                         break;
                     case "2":
                         addDish();
@@ -62,7 +62,7 @@ public class AdminConsole {
         if (Console.foodDao.getAll().isEmpty()) {
             System.out.println("No dishes to edit in Menu. Returning to main menu...");
         } else {
-            Console.ShowMenu();
+            Console.showMenu();
             int id = Console.getFoodId(); // Id блюда.
             int cookTimeMS = getFoodCookTimeMS(); // Время готовки.
             int price = getFoodPrice(); // Цена блюда.
@@ -79,7 +79,7 @@ public class AdminConsole {
         if (Console.foodDao.getAll().isEmpty()) {
             System.out.println("No dishes to remove in Menu. Returning to main menu...");
         } else {
-            Console.ShowMenu();
+            Console.showMenu();
             int id = Console.getFoodId(); // Id блюда.
             Console.foodDao.delete(Console.foodDao.read(id));
             System.out.println("Removing dish is successful.");
@@ -89,7 +89,7 @@ public class AdminConsole {
 
     // Метод для добавления блюда в меню.
     private static void addDish() throws IOException {
-        Console.ShowMenu();
+        Console.showMenu();
 
         String name = getFoodName(); // Название блюда.
         int cookTimeMS = getFoodCookTimeMS(); // Время готовки.
